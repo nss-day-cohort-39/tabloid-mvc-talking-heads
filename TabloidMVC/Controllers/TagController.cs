@@ -44,10 +44,11 @@ namespace TabloidMVC.Controllers
         // POST: TagController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(IFormCollection collection)
+        public IActionResult Create(Tag tag)
         {
             try
             {
+                _tagRepository.Add(tag);
                 return RedirectToAction(nameof(Index));
             }
             catch
