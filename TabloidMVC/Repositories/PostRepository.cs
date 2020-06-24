@@ -205,6 +205,29 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        public void DeletePost(int postId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            Delete from Post
+                            WHERE Id = @id ON DELETE CASCADE";
+                            
+
+
+
+                    cmd.Parameters.AddWithValue("@id", postId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+        }
+
         private Post NewPostFromReader(SqlDataReader reader)
         {
             return new Post()
@@ -240,5 +263,46 @@ namespace TabloidMVC.Repositories
                 }
             };
         }
+
+        //public void UpdateDog(Dog dog)
+        //{
+        //    using (SqlConnection conn = Connection)
+        //    {
+        //        conn.Open();
+
+        //        using (SqlCommand cmd = conn.CreateCommand())
+        //        {
+        //            cmd.CommandText = @"
+        //                    UPDATE Dog
+        //                    SET 
+        //                        [Name] = @name, 
+        //                        OwnerId = @ownerId, 
+        //                        Breed = @breed, 
+        //                        Notes = @notes, 
+        //                        ImageUrl = @imageUrl
+        //                    WHERE Id = @id";
+
+        //            cmd.Parameters.AddWithValue("@name", dog.Name);
+        //            cmd.Parameters.AddWithValue("@ownerId", dog.OwnerId);
+        //            cmd.Parameters.AddWithValue("@breed", dog.Breed);
+        //            cmd.Parameters.AddWithValue("@notes", dog.Notes);
+        //            // cmd.Parameters.AddWithValue("@imageUrl", dog.ImageUrl);
+        //            cmd.Parameters.AddWithValue("@id", dog.Id);
+
+        //            if (dog.ImageUrl == null)
+        //            {
+        //                cmd.Parameters.AddWithValue("@imageUrl", DBNull.Value);
+        //            }
+        //            else
+        //            {
+        //                cmd.Parameters.AddWithValue("@imageUrl", dog.ImageUrl);
+        //            }
+
+        //            cmd.ExecuteNonQuery();
+        //        }
+        //    }
+        //}
+
+       
     }
 }
