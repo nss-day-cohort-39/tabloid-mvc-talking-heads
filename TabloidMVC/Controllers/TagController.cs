@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using TabloidMVC.Models;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
@@ -79,16 +80,18 @@ namespace TabloidMVC.Controllers
         // GET: TagController/Delete/5
         public IActionResult Delete(int id)
         {
-            return View();
+            var tag = _tagRepository.GetTagById(id);
+            return View(tag);
         }
 
         // POST: TagController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id, IFormCollection collection)
+        public IActionResult Delete(int id, Tag tag)
         {
             try
             {
+                _tagRepository.DeleteTag(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
