@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
+using System;
+using System.Collections.Generic;
 using System.Security.Claims;
+using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
@@ -13,6 +16,7 @@ namespace TabloidMVC.Controllers
     {
         private readonly PostRepository _postRepository;
         private readonly CategoryRepository _categoryRepository;
+        
 
         public PostController(IConfiguration config)
         {
@@ -67,13 +71,107 @@ namespace TabloidMVC.Controllers
                 _postRepository.Add(vm.Post);
 
                 return RedirectToAction("Details", new { id = vm.Post.Id });
-            } 
+            }
             catch
             {
                 vm.CategoryOptions = _categoryRepository.GetAll();
                 return View(vm);
             }
         }
+
+
+        // GET: Delete
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            int userId = GetCurrentUserProfileId();
+            var post = _postRepository.GetPublishedPostById(id);
+            if (post.UserProfileId != userId)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(post);
+            }
+        }
+
+        // POST: DogController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public IActionResult Delete(int id, Post post)
+        {
+            try
+            {
+                _postRepository.DeletePost(id);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View(post);
+            }
+        }
+
+
+        //GET: Post Controller
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+           int userId = GetCurrentUserProfileId();
+            Post post = _postRepository.GetPublishedPostById(id);
+            List<Category> categories = _categoryRepository.GetAll();
+
+            UserEditViewModel vm = new UserEditViewModel()
+            {
+                Post = post,
+                Category = categories
+            };
+           
+
+
+            if (vm.Post.UserProfile.Id != userId)
+            {
+                return NotFound();
+            }
+
+            return View(vm);
+        }
+
+        //POST: Post Controller
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Post post)
+        {
+            //The list of categories is neccessary in case you change the value on the edit
+
+            List<Category> categories = _categoryRepository.GetAll();
+            UserEditViewModel vm = new UserEditViewModel()
+
+            {
+                Post = post,
+                Category = categories
+              
+            };
+
+            try
+            {
+                //setting the UserProfileId. Doing this here instead of making it hidden in the view
+                post.UserProfileId = GetCurrentUserProfileId();
+                _postRepository.UpdatePost(post);
+
+                return RedirectToAction("Index");
+            }
+
+            catch (Exception ex)
+            {
+                return View(vm);
+            }
+        }
+    
+
 
         private int GetCurrentUserProfileId()
         {
