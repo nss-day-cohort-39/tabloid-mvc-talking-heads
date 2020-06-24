@@ -207,25 +207,74 @@ namespace TabloidMVC.Repositories
 
         public void DeletePost(int postId)
         {
-            using (SqlConnection conn = Connection)
+            using (var conn = Connection)
             {
                 conn.Open();
 
-                using (SqlCommand cmd = conn.CreateCommand())
+                using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
                             Delete from Post
-                            WHERE Id = @id ON DELETE CASCADE";
+                            WHERE Id = @id";
                             
-
-
-
                     cmd.Parameters.AddWithValue("@id", postId);
 
                     cmd.ExecuteNonQuery();
                 }
             }
 
+        }
+
+        public void UpdatePost(Post post)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            UPDATE Post
+                            SET 
+                                [Title] = @title, 
+                                Content = @content, 
+                                ImageLocation = @imageLocation, 
+                                CreateDateTime = @createDateTime, 
+                                PublishDateTime = @publishDateTime,
+                                IsApproved = @isApproved,
+                                CategoryId = @categoryId,
+                                UserProfileId = @userProfileId,
+                                IsDeleted = @isDeleted
+                            WHERE Id = @id";
+
+                    cmd.Parameters.AddWithValue("@title", post.Title);
+                    cmd.Parameters.AddWithValue("@content", post.Content);
+                   // cmd.Parameters.AddWithValue("@imageLocation", post.ImageLocation);
+                    cmd.Parameters.AddWithValue("@createDateTime", post.CreateDateTime);
+                    cmd.Parameters.AddWithValue("@publishDateTime", post.PublishDateTime);
+                    cmd.Parameters.AddWithValue("@isApproved", post.IsApproved = true);
+                    cmd.Parameters.AddWithValue("@categoryId", post.CategoryId);
+                    cmd.Parameters.AddWithValue("@userProfileId", post.UserProfileId);
+                    cmd.Parameters.AddWithValue("@isDeleted", post.IsDeleted);
+                    cmd.Parameters.AddWithValue("@id", post.Id);
+
+                    if (post.ImageLocation == null)
+                    {
+                        cmd.Parameters.AddWithValue("@imageLocation", DBNull.Value);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@imageLocation", post.ImageLocation);
+                    }
+
+                    //if (post.IsApproved == false)
+                    //{
+                    //    cmd.Parameters.AddWithValue("@isApproved", post.IsApproved = true);
+                    //}
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         private Post NewPostFromReader(SqlDataReader reader)

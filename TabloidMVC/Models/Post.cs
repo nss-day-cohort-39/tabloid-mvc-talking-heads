@@ -25,6 +25,8 @@ namespace TabloidMVC.Models
 
         public bool IsApproved { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         [Required]
         [DisplayName("Category")]
         public int CategoryId { get; set; }
