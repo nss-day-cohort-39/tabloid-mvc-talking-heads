@@ -16,9 +16,10 @@ namespace TabloidMVC.Controllers
             _commentRepository = new CommentRepository(config);
         }
         // GET: CommentsController
-        public ActionResult Index()
+        public ActionResult CommentsIndex(int id)
         {
-            return View();
+            var comments = _commentRepository.GetCommentsByPostId(id);
+            return View(comments);
         }
 
         // GET: CommentsController/Details/5
@@ -40,7 +41,7 @@ namespace TabloidMVC.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(CommentsIndex));
             }
             catch
             {
@@ -61,7 +62,7 @@ namespace TabloidMVC.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(CommentsIndex));
             }
             catch
             {
@@ -82,7 +83,7 @@ namespace TabloidMVC.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(CommentsIndex));
             }
             catch
             {
