@@ -62,21 +62,23 @@ namespace TabloidMVC.Controllers
         // GET: CommentsController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var comment = _commentRepository.GetCommentById(id);
+            return View(comment);
         }
 
         // POST: CommentsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Comment comment)
         {
             try
             {
-                return RedirectToAction(nameof(CommentsIndex));
+                _commentRepository.UpdateComment(comment);
+                return RedirectToAction("CommentsIndex", new { id=comment.PostId });
             }
             catch
             {
-                return View();
+                return View(comment);
             }
         }
 
