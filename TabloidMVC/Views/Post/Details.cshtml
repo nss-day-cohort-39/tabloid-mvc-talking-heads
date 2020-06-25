@@ -8,6 +8,9 @@
         <a asp-action="CommentsIndex" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="View" asp-controller="Comments">
             Comments
         </a>
+        <a asp-action="Create" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Create" asp-controller="Comments">
+            Add Comment
+        </a>
         <div class="post">
             <section class="px-3">
                 <div class="row justify-content-between">

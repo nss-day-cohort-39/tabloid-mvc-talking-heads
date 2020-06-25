@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System.Security.Claims;
+using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
@@ -10,10 +13,12 @@ namespace TabloidMVC.Controllers
     public class CommentsController : Controller
     {
         private readonly CommentRepository _commentRepository;
+        private readonly PostRepository _postRepository;
 
         public CommentsController(IConfiguration config)
         {
             _commentRepository = new CommentRepository(config);
+            _postRepository = new PostRepository(config);
         }
         // GET: CommentsController
         public ActionResult CommentsIndex(int id)
@@ -29,23 +34,28 @@ namespace TabloidMVC.Controllers
         }
 
         // GET: CommentsController/Create
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
+            
             return View();
         }
 
         // POST: CommentsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Comment comment, int id)
         {
             try
             {
-                return RedirectToAction(nameof(CommentsIndex));
+
+                comment.UserProfileId = GetCurrentUserProfileId();
+                comment.PostId = id;
+                _commentRepository.Add(comment);
+                return RedirectToAction(nameof(CommentsIndex(id)));
             }
             catch
             {
-                return View();
+                return View(comment);
             }
         }
 
@@ -89,6 +99,12 @@ namespace TabloidMVC.Controllers
             {
                 return View();
             }
+        }
+
+        private int GetCurrentUserProfileId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
     }
 }
