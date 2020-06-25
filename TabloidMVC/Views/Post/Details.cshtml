@@ -11,6 +11,9 @@
         <a asp-action="Create" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Create" asp-controller="Comments">
             Add Comment
         </a>
+        <a asp-action="ManageTags" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="View" asp-controller="Post">
+            Add Tags
+        </a>
         <div class="post">
             <section class="px-3">
                 <div class="row justify-content-between">

@@ -132,6 +132,24 @@ namespace TabloidMVC.Repositories
             }
         }
 
+
+        public void InsertTagToPost(int postId, int tagId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO PostTag (PostId, TagId)
+                                                     
+                                                       VALUES (@postId, @tagId)";
+                    cmd.Parameters.AddWithValue("@postId", postId);
+                    cmd.Parameters.AddWithValue("@tagId", tagId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         private Tag NewTagFromReader(SqlDataReader reader)
         {
             return new Tag()
