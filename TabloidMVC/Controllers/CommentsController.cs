@@ -86,7 +86,7 @@ namespace TabloidMVC.Controllers
         public ActionResult Delete(int id)
         {
            
-            var comment = _commentRepository.GetCommentsByPostId(id);
+            var comment = _commentRepository.GetCommentById(id);
          
                 return View(comment);
             
@@ -102,7 +102,7 @@ namespace TabloidMVC.Controllers
             {
                 _commentRepository.DeleteComment(id);
 
-                return RedirectToAction(nameof(CommentsIndex));
+                return RedirectToAction("CommentsIndex", new { id = comment.PostId });
             }
             catch
             {

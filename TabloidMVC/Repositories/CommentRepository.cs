@@ -170,7 +170,7 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-        public void DeleteComment(int commentId)
+        public void DeleteComment(int id)
         {
             using (var conn = Connection)
             {
@@ -183,7 +183,7 @@ namespace TabloidMVC.Repositories
                             WHERE Id = @id
                         ";
 
-                    cmd.Parameters.AddWithValue("@id", commentId);
+                    cmd.Parameters.AddWithValue("@id", id);
 
                     cmd.ExecuteNonQuery();
                 }

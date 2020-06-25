@@ -51,9 +51,9 @@
 
     <form asp-action="Delete">
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+    
     </form>
     <p>
-        <a class="btn btn-primary" asp-action="CommentsIndex">Reject</a>
+        <a class="btn btn-primary" asp-route-id="@Model.PostId" asp-action="CommentsIndex">Reject</a>
     </p>
 </div>
