@@ -36,5 +36,5 @@
         }
     </tbody>
 </table>
-<a asp-action="Details" asp-controller="Post" asp-route-id="1">Back to List</a>
+<a asp-action="Details" asp-controller="Post" asp-route-id="@Model.First().PostId">Back to Post</a>
 

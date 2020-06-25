@@ -83,6 +83,42 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        public Comment GetCommentById(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                                        SELECT Id, PostId, UserProfileId, Subject, Content, CreateDateTime
+                                        FROM Comment
+                                        WHERE Id = @id
+                                        ";
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    var reader = cmd.ExecuteReader();
+                    Comment comment = null;
+                    if (reader.Read())
+                    {
+                        comment = new Comment()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            PostId = reader.GetInt32(reader.GetOrdinal("PostId")),
+                            UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
+                            Subject = reader.GetString(reader.GetOrdinal("Subject")),
+                            Content = reader.GetString(reader.GetOrdinal("Content")),
+                            CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime"))
+                        };
+                    }
+
+                    reader.Close();
+
+                    return comment;
+                }
+            }
+        }
+
         public void Add(Comment comment)
         {
             using (var conn = Connection)
@@ -101,6 +137,36 @@ namespace TabloidMVC.Repositories
                     cmd.Parameters.AddWithValue("@createDateTime", DateTime.Now);
 
                     comment.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+
+        public void UpdateComment(Comment comment)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            UPDATE Comment
+                            SET 
+                                PostId = @postId, 
+                                UserProfileId = @userProfileId,
+                                Subject = @subject, 
+                                Content = @content, 
+                                CreateDateTime = @createDateTime
+                            WHERE Id = @id";
+
+                    cmd.Parameters.AddWithValue("@postId", comment.PostId);
+                    cmd.Parameters.AddWithValue("@userProfileId", comment.UserProfileId);
+                    cmd.Parameters.AddWithValue("@subject", comment.Subject);
+                    cmd.Parameters.AddWithValue("@content", comment.Content);
+                    cmd.Parameters.AddWithValue("@createDateTime", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@id", comment.Id);
+
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

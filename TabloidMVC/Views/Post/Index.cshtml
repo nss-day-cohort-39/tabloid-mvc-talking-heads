@@ -7,19 +7,20 @@
 
     <div class="container pt-5">
         <h1>Posts</h1>
-
-        <p>
-            <a class="btn btn-primary" asp-action="Create">New Post</a>
-        </p>
-        <p>
-            <a class="btn btn-primary" asp-action="UserIndex">My Posts</a>
-        </p>
-        <p class="nav-item mx-0 mx-lg-1">
-            <a class="btn btn-primary" asp-controller="Category" asp-action="Index">Category Management</a>
-        </p>
-        <p class="nav-item mx-0 mx-lg-1">
-            <a class="btn btn-primary" asp-controller="Tag" asp-action="Index">Tag Management</a>
-        </p>
+        <div class="row d-flex justify-content-around">
+            <p>
+                <a class="btn btn-primary" asp-action="Create">New Post</a>
+            </p>
+            <p>
+                <a class="btn btn-primary" asp-action="UserIndex">My Posts</a>
+            </p>
+            <p class="nav-item mx-0 mx-lg-1">
+                <a class="btn btn-primary" asp-controller="Category" asp-action="Index">Category Management</a>
+            </p>
+            <p class="nav-item mx-0 mx-lg-1">
+                <a class="btn btn-primary" asp-controller="Tag" asp-action="Index">Tag Management</a>
+            </p>
+        </div>
         <table class="table table-striped">
             <thead>
                 <tr>
