@@ -46,7 +46,7 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-        public List<Comment> GetCommentsByPostId(int postId)
+        public List<Comment> GetCommentsByPostId(int postId) //actually the Post.Id
         {
             using (var conn = Connection)
             {
@@ -165,6 +165,25 @@ namespace TabloidMVC.Repositories
                     cmd.Parameters.AddWithValue("@content", comment.Content);
                     cmd.Parameters.AddWithValue("@createDateTime", DateTime.Now);
                     cmd.Parameters.AddWithValue("@id", comment.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public void DeleteComment(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            DELETE FROM Comment
+                            WHERE Id = @id
+                        ";
+
+                    cmd.Parameters.AddWithValue("@id", id);
 
                     cmd.ExecuteNonQuery();
                 }

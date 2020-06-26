@@ -214,7 +214,11 @@ namespace TabloidMVC.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                            Delete from Post
+                            Delete from COMMENT 
+                           
+                            WHERE PostId = @id;
+
+                            DELETE FROM POST 
                             WHERE Id = @id";
                             
                     cmd.Parameters.AddWithValue("@id", postId);
