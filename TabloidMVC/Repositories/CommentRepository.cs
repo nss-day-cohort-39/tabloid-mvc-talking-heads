@@ -46,7 +46,7 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-        public List<Comment> GetCommentsByPostId(int postId)
+        public List<Comment> GetCommentsByPostId(int postId) //actually the Post.Id
         {
             using (var conn = Connection)
             {

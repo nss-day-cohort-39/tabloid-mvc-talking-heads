@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
 using System.Security.Claims;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
+using System.Windows;
 
 namespace TabloidMVC.Controllers
 {
@@ -21,12 +23,15 @@ namespace TabloidMVC.Controllers
             _postRepository = new PostRepository(config);
         }
         // GET: CommentsController
+        //Comments index expects an id that it gets from post so that you only see comments associated with particular post 
         public ActionResult CommentsIndex(int id)
-        {
-            var comments = _commentRepository.GetCommentsByPostId(id);
-            return View(comments);
-        }
+        { 
+            var comments = _commentRepository.GetCommentsByPostId(id); //comments are listed by the postsId in the Get CommentsByPostId
 
+            return View(comments);
+            
+
+        }
         // GET: CommentsController/Details/5
         public ActionResult Details(int id)
         {
