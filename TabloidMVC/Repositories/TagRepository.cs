@@ -132,6 +132,37 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        public List<Tag> GetAllTagsNotOnPost(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                       SELECT t.Id, t.Name
+                       FROM Tag t
+                       JOIN PostTag pt ON pt.TagId != t.Id
+                       JOIN Post p ON pt.PostId != p.Id
+                       Where pt.PostId = @id;";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+                    var reader = cmd.ExecuteReader();
+
+                    var tags = new List<Tag>();
+
+                    while (reader.Read())
+                    {
+                        tags.Add(NewTagFromReader(reader));
+                    }
+
+                    reader.Close();
+
+                    return tags;
+                }
+            }
+        }
+
 
         public void InsertTagToPost(int postId, int tagId)
         {

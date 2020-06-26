@@ -174,10 +174,17 @@ namespace TabloidMVC.Controllers
             }
         }
 
-        public ActionResult ManageTags()
+        public ActionResult ManageTags(int id)
         {
-            var tags = _tagRepository.GetAllTags();
-            return View(tags);
+            List<Tag> tags  = _tagRepository.GetAllTagsNotOnPost(id);
+            var post = _postRepository.GetPublishedPostById(id);
+            AddTagViewModel vm = new AddTagViewModel()
+            {
+                post = post,
+                Tags = tags
+            };
+
+            return View(vm);
         }
 
         public ActionResult InsertTag(int postId, int tagId)
