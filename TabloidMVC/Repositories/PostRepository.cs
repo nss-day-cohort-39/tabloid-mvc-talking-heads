@@ -215,7 +215,7 @@ namespace TabloidMVC.Repositories
                 {
                     cmd.CommandText = @"
                             Delete from Post
-                            WHERE Id = @id";
+                            WHERE Id = @4";
                             
                     cmd.Parameters.AddWithValue("@id", postId);
 
